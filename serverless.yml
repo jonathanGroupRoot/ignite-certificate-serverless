@@ -13,7 +13,6 @@ custom:
   dynamodb:
     stages:
       - dev
-      - local
     start:
       port: 8000
       inMemory: true
@@ -25,17 +24,17 @@ provider:
   region: sa-east-1
 
 functions:
-  hello:
-    handler: src/functions/hello.handle
+  generateCertificate:
+    handler: src/functions/generateCertificate.handle
     events:
       - http:
-          path: /hello
-          method: GET
+          path: /generateCertificate
+          method: POST
           cors: true
-
+          
 resources:
-  Resources: 
-    dbCertificateUser:
+  Resources:
+    dbCertificateUsers:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: users_certificates
@@ -43,8 +42,8 @@ resources:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
         AttributeDefinitions:
-          - AttributeName: id 
+          - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: id 
+          - AttributeName: id
             KeyType: HASH
